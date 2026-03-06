@@ -1,9 +1,9 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "sonner";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({
   children,
@@ -12,7 +12,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={cn("font-sans", inter.variable)}>
-      <body>{children}</body>
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
     </html>
   );
 }

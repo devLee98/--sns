@@ -1,9 +1,5 @@
-import { cn } from "@/lib/utils";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+import Providers from "./provider";
 
 export default function RootLayout({
   children,
@@ -11,10 +7,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={cn("font-sans", inter.variable)}>
+    <html lang="ko">
       <body>
-        <main>{children}</main>
-        <Toaster />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

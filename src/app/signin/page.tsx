@@ -9,6 +9,7 @@ export default async function SignInPage({
 }: {
   searchParams: Promise<{ error: string | null }>;
 }) {
+  // TODO(auth): 제출 중 버튼 비활성화(useFormStatus) 적용
   const { error } = await searchParams;
   return (
     <>

@@ -33,12 +33,23 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims(); //현재 엑세스토큰 확인(유효성검사), 문제시 세선 갱신 시도
 
   const user = data?.claims;
+  const path = request.nextUrl.pathname;
 
+  // 1) 로그인 유저는 auth 페이지 접근 막기
+  if (user && (path.startsWith("/signin") || path.startsWith("/signup"))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
+  // 2) 비로그인 유저는 로그인 페이지 접근 막기
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/signin") &&
-    !request.nextUrl.pathname.startsWith("/signup") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !path.startsWith("/signin") &&
+    !path.startsWith("/signup") &&
+    !path.startsWith("/forgetpassword") &&
+    !path.startsWith("/resetpassword") &&
+    !path.startsWith("/auth")
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";

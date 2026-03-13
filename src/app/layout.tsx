@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import Providers from "./provider";
+import PostEditModal from "@/components/modal/posteditmodal";
 
 export default function RootLayout({
   children,
@@ -40,6 +41,8 @@ export default function RootLayout({
               @이영찬
             </footer>
           </div>
+          <PostEditModal />
+          <div id="modal-root" />
         </Providers>
       </body>
     </html>

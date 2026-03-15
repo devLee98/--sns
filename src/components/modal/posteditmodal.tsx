@@ -15,9 +15,9 @@ type Image = {
 };
 
 export default function PostEditModal({
-  createPostAction,
+  createWithdImagesAction,
 }: {
-  createPostAction: (formData: FormData) => Promise<void>;
+  createWithdImagesAction: (formData: FormData) => Promise<void>;
 }) {
   const { isOpen, close } = usePostEditModal();
 
@@ -47,6 +47,16 @@ export default function PostEditModal({
       prev.filter((img) => img.previewUrl !== image.previewUrl),
     );
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("content", content);
+    images.forEach((img) => formData.append("image", img.file));
+    await createWithdImagesAction(formData);
+    handleCloseModal();
+  };
+
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -67,7 +77,7 @@ export default function PostEditModal({
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
       <DialogContent className="max-h-[90vh]">
         <DialogTitle>포스트 작성</DialogTitle>
-        <form action={createPostAction} id="post-edit-form">
+        <form id="post-edit-form" onSubmit={handleSubmit}>
           <textarea
             ref={textareaRef}
             name="content"
@@ -83,7 +93,6 @@ export default function PostEditModal({
             accept="image/*"
             multiple
             className="hidden"
-            name="image"
           />
         </form>
         {images.length > 0 && (

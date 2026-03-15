@@ -1,6 +1,7 @@
 "use client";
 
-import { usePostEditModal } from "@/app/store/posteditmodal";
+import { useOpenAlertModal } from "@/app/store/alert-modal";
+import { usePostEditModal } from "@/app/store/post-edit-modal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ImageIcon, XIcon } from "lucide-react";
@@ -20,12 +21,27 @@ export default function PostEditModal({
   createWithdImagesAction: (formData: FormData) => Promise<void>;
 }) {
   const { isOpen, close } = usePostEditModal();
+  const openAlertModal = useOpenAlertModal();
 
   const [content, setContent] = useState("");
   const [images, setImages] = useState<Image[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const handleCloseModal = () => {
+    if (content !== "" || images.length > 0) {
+      openAlertModal({
+        title: "게시글 작성이 마무리되지 않았습니다.",
+        description: "게시글 작성을 취소하시겠습니까?",
+        onPositive: () => {
+          setContent("");
+          setImages([]);
+          close();
+        },
+        onNegative: () => {},
+      });
+
+      return;
+    }
     setContent("");
     setImages([]);
     close();
